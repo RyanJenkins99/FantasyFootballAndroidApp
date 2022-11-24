@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FantasyFootball</string>
+    <string name="button_addTeam">Add Team</string>
+    <string name="hint_teamName">Team Name</string>
+    <string name="hint_teamLeague">League </string>
+    <string name="menu_addTeam">Add</string>
+    <string name="menu_cancelTeam">Cancel</string>
+
+</resources>
