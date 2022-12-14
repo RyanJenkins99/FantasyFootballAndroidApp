@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.fantasyfootball.databinding.CardTeamBinding
+
 import com.fantasyfootball.models.TeamModel
+import com.squareup.picasso.Picasso
 
 interface TeamListener {
-    fun onTeamClick(team: TeamModel)
+    fun onTeamClick(team: TeamModel, position: Int)
 }
 
 class TeamAdapter constructor(private var teams: List<TeamModel>,
@@ -33,7 +35,8 @@ class TeamAdapter constructor(private var teams: List<TeamModel>,
         fun bind(team: TeamModel, listener: TeamListener) {
             binding.teamName.text = team.name
             binding.league.text = team.league
-            binding.root.setOnClickListener { listener.onTeamClick(team) }
+            Picasso.get().load(team.image).resize(200,200).into(binding.imageIcon)
+            binding.root.setOnClickListener { listener.onTeamClick(team,adapterPosition) }
         }
     }
 }

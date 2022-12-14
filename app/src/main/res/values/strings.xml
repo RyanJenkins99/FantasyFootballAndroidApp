@@ -3,7 +3,24 @@
     <string name="button_addTeam">Add Team</string>
     <string name="hint_teamName">Team Name</string>
     <string name="hint_teamLeague">League </string>
+    <string name="hint_teamLocation">Location </string>
     <string name="menu_addTeam">Add</string>
     <string name="menu_cancelTeam">Cancel</string>
+    <string name="enter_team_name"> Please enter a Team name </string>
+    <string name="save_team"> Save Team </string>
+    <string name="button_addImage"> Add Image </string>
+    <string name="select_team_image">Select Team image</string>
+    <string name="change_team_image">Change Team image</string>
+    <string name="button_location">See Location</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="menu_deleteTeam">Delete</string>
+    <string name="title_activity_team_maps">Map every Team</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
