@@ -35,6 +35,7 @@ class TeamAdapter constructor(private var teams: List<TeamModel>,
         fun bind(team: TeamModel, listener: TeamListener) {
             binding.teamName.text = team.name
             binding.league.text = team.league
+            binding.formation.text = team.formation
             Picasso.get().load(team.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onTeamClick(team,adapterPosition) }
         }
