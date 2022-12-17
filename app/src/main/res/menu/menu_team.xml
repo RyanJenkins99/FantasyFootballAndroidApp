@@ -4,7 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:visible="false"
+        android:id="@+id/item_delete"
+        android:title="@string/menu_deleteTeam"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/item_cancel"
         android:title="@string/menu_cancelTeam"
         app:showAsAction="always"/>
+
+
 </menu>

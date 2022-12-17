@@ -31,7 +31,7 @@ import java.util.*
 
 
 
-class TeamActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityTeamBinding
@@ -40,7 +40,7 @@ class TeamActivity : AppCompatActivity() {
     private var formation = ""
     var edit = false
     var team = TeamModel()
-//    var location = Location(52.245696, -7.139102, 15f)
+    //    var location = Location(52.245696, -7.139102, 15f)
     lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +51,7 @@ class TeamActivity : AppCompatActivity() {
         binding = ActivityTeamBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarAdd.title = title
-       // setSupportActionBar(binding.toolbarAdd)
+        // setSupportActionBar(binding.toolbarAdd)
         app = application as MainApp
 
         i("Team Activity started...")
@@ -79,7 +79,6 @@ class TeamActivity : AppCompatActivity() {
             binding.teamName.setText(team.name)
             binding.league.setText(team.league)
             binding.locationName.setText(team.loc.toString())
-//            binding.btnAddPlayer.setText(team)
             //binding.locationName.setText(team.loc)
             binding.btnAdd.setText(R.string.save_team)
 
@@ -99,14 +98,13 @@ class TeamActivity : AppCompatActivity() {
             team.name = binding.teamName.text.toString()
             team.league = binding.league.text.toString()
             team.formation = formation
-
             i("TEST:edit $edit")
             if (team.name.isEmpty()) {
                 Snackbar.make(it,R.string.enter_team_name, Snackbar.LENGTH_LONG)
                     .show()
             } else {
                 if (edit) app.teams.update(team.copy())
-                 else {
+                else {
                     i("TEST:edit $team")
                     app.teams.create(team.copy())
                 }
@@ -125,7 +123,7 @@ class TeamActivity : AppCompatActivity() {
             val location = team.loc
             if (team.zoom != 0f) {
 
-               // location.zoom = team.zoom
+                // location.zoom = team.zoom
             }
             val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)

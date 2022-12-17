@@ -14,17 +14,19 @@ import com.fantasyfootball.adapters.TeamListener
 import com.fantasyfootball.databinding.ActivityTeamListBinding
 import com.fantasyfootball.main.MainApp
 import com.fantasyfootball.models.TeamModel
+import timber.log.Timber
 
 
 class TeamListActivity : AppCompatActivity(), TeamListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityTeamListBinding
+    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeamListBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_team_list)
+        setContentView(binding.root)
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
 
@@ -32,8 +34,7 @@ class TeamListActivity : AppCompatActivity(), TeamListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter
-        TeamAdapter(app.teams.findAll(),this)
+        binding.recyclerView.adapter = TeamAdapter(app.teams.findAll(),this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,6 +48,10 @@ class TeamListActivity : AppCompatActivity(), TeamListener {
                 val launcherIntent = Intent(this, TeamActivity::class.java)
                 getResult.launch(launcherIntent)
             }
+            R.id.item_map -> {
+                val launcherIntent = Intent(this, TeamMapsActivity::class.java)
+                mapIntentLauncher.launch(launcherIntent)
+            }
         }
         return super.onOptionsItemSelected(item)
 }
@@ -56,14 +61,16 @@ class TeamListActivity : AppCompatActivity(), TeamListener {
             ActivityResultContracts.StartActivityForResult()
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
+                Timber.i("IM HERE" +app.teams.findAll())
                 (binding.recyclerView.adapter)?.
                 notifyItemRangeChanged(0,app.teams.findAll().size)
             }
         }
 
-    override fun onTeamClick(team: TeamModel) {
+    override fun onTeamClick(team: TeamModel, pos : Int) {
         val launcherIntent = Intent(this, TeamActivity::class.java)
         launcherIntent.putExtra("team_edit", team)
+        position = pos
         getClickResult.launch(launcherIntent)
     }
 
@@ -75,7 +82,15 @@ class TeamListActivity : AppCompatActivity(), TeamListener {
                 (binding.recyclerView.adapter)?.
                 notifyItemRangeChanged(0,app.teams.findAll().size)
             }
+            else
+                binding.recyclerView.adapter = TeamAdapter(app.teams.findAll(),this)
+            if (it.resultCode == 99)     (binding.recyclerView.adapter)?.notifyItemRemoved(position)
         }
+
+    private val mapIntentLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        )    { }
 }
 
 
