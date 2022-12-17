@@ -47,6 +47,7 @@ class TeamJSONStore(private val context: Context) : TeamStore {
         if (foundTeam != null) {
             foundTeam.name = team.name
             foundTeam.league = team.league
+            foundTeam.formation = team.formation
             foundTeam.image = team.image
             foundTeam.lat = team.lat
             foundTeam.lng = team.lng

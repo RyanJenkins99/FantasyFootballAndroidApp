@@ -16,7 +16,7 @@ data class TeamModel(
     var lng: Double = 0.0,
     var loc: LatLng? = null,
     var zoom: Float = 0f,
-    var formation: MutableList<String> = mutableListOf()
+    var formation: String = ""
 ) : Parcelable
 //    var formation: Formation,
 
