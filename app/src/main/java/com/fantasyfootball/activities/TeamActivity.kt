@@ -23,6 +23,8 @@ import com.fantasyfootball.models.TeamModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import timber.log.Timber
 import timber.log.Timber.i
@@ -33,7 +35,7 @@ import java.util.*
 
 class TeamActivity : AppCompatActivity() {
 
-
+    val db = Firebase.firestore
     private lateinit var binding: ActivityTeamBinding
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
@@ -107,8 +109,18 @@ class TeamActivity : AppCompatActivity() {
             } else {
                 if (edit) app.teams.update(team.copy())
                  else {
+
                     i("TEST:edit $team")
                     app.teams.create(team.copy())
+                    db.collection("teams")
+                        .add(team)
+                        .addOnSuccessListener { documentReference ->
+                            Timber.i("DocumentSnapshot written with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Timber.i("Error adding document" +e)
+                        }
+
                 }
             }
             i("Test: $team")
