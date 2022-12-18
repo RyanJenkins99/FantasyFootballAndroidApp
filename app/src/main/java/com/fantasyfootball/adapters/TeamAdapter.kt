@@ -12,7 +12,7 @@ interface TeamListener {
     fun onTeamClick(team: TeamModel, position: Int)
 }
 
-class TeamAdapter constructor(private var teams: List<TeamModel>,
+class TeamAdapter constructor(private var teams: ArrayList<TeamModel>,
                               private val listener: TeamListener) :
     RecyclerView.Adapter<TeamAdapter.MainHolder>() {
 

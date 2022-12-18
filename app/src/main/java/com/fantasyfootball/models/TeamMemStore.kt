@@ -12,9 +12,6 @@ class TeamMemStore : TeamStore {
 
     val teams = ArrayList<TeamModel>()
 
-    override fun findAll(): List<TeamModel> {
-        return teams
-    }
 
     override fun create(team: TeamModel) {
         teams.add(team)

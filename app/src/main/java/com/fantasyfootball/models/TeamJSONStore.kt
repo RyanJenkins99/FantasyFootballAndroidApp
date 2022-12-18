@@ -29,10 +29,7 @@ class TeamJSONStore(private val context: Context) : TeamStore {
         }
     }
 
-    override fun findAll(): MutableList<TeamModel> {
-        logAll()
-        return teams
-    }
+
 
     override fun create(team: TeamModel) {
 //        team.id = generateRandomId()
@@ -42,8 +39,8 @@ class TeamJSONStore(private val context: Context) : TeamStore {
 
 
     override fun update(team: TeamModel) {
-        val teamsList = findAll() as ArrayList<TeamModel>
-        var foundTeam: TeamModel? = teamsList.find { p -> p.id == team.id }
+
+        var foundTeam: TeamModel? = teams.find { p -> p.id == team.id }
         if (foundTeam != null) {
             foundTeam.name = team.name
             foundTeam.league = team.league

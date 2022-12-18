@@ -11,7 +11,7 @@ import timber.log.Timber.i
 class MainApp : Application() {
 
 //    val teams = ArrayList<TeamModel>()
-    lateinit var teams: TeamStore
+    lateinit var teams: TeamMemStore
 
     override fun onCreate() {
         super.onCreate()

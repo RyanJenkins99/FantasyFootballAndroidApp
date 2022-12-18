@@ -8,6 +8,7 @@ import java.util.UUID
 
 @Parcelize
 data class TeamModel(
+    var id: UUID = UUID.randomUUID(),
     var name: String = "Bob",
     var league: String = "Prem",
     var image: Uri = Uri.EMPTY,
