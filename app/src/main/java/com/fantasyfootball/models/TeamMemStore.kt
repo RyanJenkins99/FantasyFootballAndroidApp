@@ -2,11 +2,11 @@ package com.fantasyfootball.models
 
 import timber.log.Timber.i
 
-var lastId = 0L
-
-internal fun getId(): Long {
-    return lastId++
-}
+//var lastId = 0L
+//
+//internal fun getId(): Long {
+//    return lastId++
+//}
 
 class TeamMemStore : TeamStore {
 

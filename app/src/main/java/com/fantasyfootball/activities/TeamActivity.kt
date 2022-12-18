@@ -14,11 +14,18 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.fantasyfootball.R
+import com.fantasyfootball.adapters.PlayerAdapter
+import com.fantasyfootball.adapters.PlayerListener
+import com.fantasyfootball.adapters.TeamAdapter
 import com.fantasyfootball.databinding.ActivityTeamBinding
+
 import com.fantasyfootball.helpers.showImagePicker
 import com.fantasyfootball.main.MainApp
 import com.fantasyfootball.models.Location
+import com.fantasyfootball.models.PlayerModel
 import com.fantasyfootball.models.TeamModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
@@ -26,6 +33,8 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import timber.log.Timber.i
 import java.io.IOException
@@ -33,7 +42,7 @@ import java.util.*
 
 
 
-class TeamActivity : AppCompatActivity() {
+class TeamActivity : AppCompatActivity() , PlayerListener{
 
     val db = Firebase.firestore
     private lateinit var binding: ActivityTeamBinding
@@ -85,6 +94,7 @@ class TeamActivity : AppCompatActivity() {
             //binding.locationName.setText(team.loc)
             binding.btnAdd.setText(R.string.save_team)
 
+
             Picasso.get()
                 .load(team.image)
                 .into(binding.teamImage)
@@ -128,12 +138,19 @@ class TeamActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.btnAddPlayer.setOnClickListener() {
+            val launcherIntent = Intent(this, PlayerActivity::class.java)
+            launcherIntent.putExtra("teamName",team.name)
+            startActivity(launcherIntent)
+                }
+
+
 
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher, this)
         }
 
-        binding.teamLocation.setOnClickListener {
+        binding.teamLocation.setOnClickListener {//finds teams address
             val location = team.loc
             if (team.zoom != 0f) {
 
@@ -146,6 +163,12 @@ class TeamActivity : AppCompatActivity() {
 
         registerImagePickerCallback()
         registerMapCallback()
+        app.players.players.clear()
+        viewPlayers()
+        val layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewPlayers.layoutManager = layoutManager
+        binding.recyclerViewPlayers.adapter = PlayerAdapter(app.players.players,this)
+
 
     }
 
@@ -232,6 +255,39 @@ class TeamActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return null
+    }
+
+    override fun onPlayerClick(player: PlayerModel, position: Int) {//finds player address start
+        val launcherIntent = Intent(this, MapActivity::class.java)
+            .putExtra("location", player.loc)
+        mapIntentLauncher.launch(launcherIntent)
+
+    }
+
+
+
+    fun viewPlayers() = runBlocking {
+
+        db.collection("players")//looks for teams collection
+            .whereEqualTo("teamId", binding.teamName.text.toString())
+
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {//make a new team object and add to teams array
+                    Timber.d( "${document.id} => ${document.data}")
+                    var location = document.data["loc"] as MutableMap<String, Double>
+                    app.players.players.add(
+                        PlayerModel(document.data["name"].toString(),document.data["position"].toString(),
+                            document.data["number"].toString().toInt(),"".toUri(),
+                            location.get("latitude")?.let { LatLng(it, location.get("longitude")!!) },""
+                        ))
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.d( "Error getting documents: "+ exception)
+            }
+            .await()
     }
 
 }

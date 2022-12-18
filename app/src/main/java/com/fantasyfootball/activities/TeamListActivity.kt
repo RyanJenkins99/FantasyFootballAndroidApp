@@ -56,6 +56,7 @@ class TeamListActivity : AppCompatActivity(), TeamListener {
     }
 
     fun getTeams() = runBlocking {
+        app.teams.teams.clear()
         db.collection("teams")//looks for teams collection
             .get()
             .addOnSuccessListener { result ->
